@@ -36,7 +36,8 @@ use Tapp\FilamentTimezoneField\Forms\Components\TimezoneSelect;
 use PragmaRX\Countries\Package\Countries;
 
 use Filament\Forms\Get;
-
+use Filament\Infolists\Components\ViewEntry;
+use Filament\Tables\Columns\ViewColumn;
 
 class EmployeeResource extends Resource
 {
@@ -356,16 +357,17 @@ class EmployeeResource extends Resource
         return $table
             ->contentGrid([
                 'mduse Illuminate\Auth\Events\Registered;' => 3,
-                'xl' => 3,
+                'xl' => 4,
             ])
             ->columns([
 
                 Split::make([
                     Stack::make([
-                        ImageColumn::make('employee.profile_picture_url')
-                            ->label('Image')->circular(),
-                        TextColumn::make('name')->searchable()->sortable()->toggleable()->weight('bold'),
-                        TextColumn::make('jobInfo.designation.name')->label('Gender'),
+                        // ImageColumn::make('employee.profile_picture_url')
+                        //     ->label('Image')->circular(),
+                        // TextColumn::make('name')->searchable()->sortable()->toggleable()->weight('bold'),
+                        // TextColumn::make('jobInfo.designation.name')->label('Gender'),
+                        ViewColumn::make('name')->view('tables.columns.employee-card')->searchable(),
                     ])
                 ])
             ])
@@ -373,15 +375,25 @@ class EmployeeResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->visible(function ($record) {
-                        $id = $record['id'];
-                        // dd($id);
-                        if (auth()->id() == $id && auth()->user()->hasRole('Staff') || auth()->user()->hasPermissionTo('Employee Profiles')) {
-                            return true;
-                        }
-                    })
+                // Tables\Actions\EditAction::make()
+                //     ->visible(function ($record) {
+                //         $id = $record['id'];
+                //         // dd($id);
+                //         if (auth()->id() == $id && auth()->user()->hasRole('Staff') || auth()->user()->hasPermissionTo('Employee Profiles')) {
+                //             return true;
+                //         }
+                //     }),
 
+                    Tables\Actions\Action::make('Contact Information')
+                    ->slideOver()
+                    ->modalHeading(fn ($livewire) => __(''))
+
+                    ->modalCancelAction(false)
+                    ->modalSubmitAction(false)
+                    ->infolist([
+                        ViewEntry::make('')
+                            ->view('infolists.components.employee-slider')
+                    ])
 
             ])
             ->bulkActions([

@@ -22,6 +22,7 @@ use App\Filament\Resources\HelpDesk\TicketResource;
 use App\Filament\Resources\Learning\CourseResource;
 use App\Filament\Resources\Learning\EnrollmentResource;
 use App\Filament\Resources\Learning\MyLearningResource;
+use App\Filament\Resources\MyInfoResource;
 use App\Filament\Resources\Offboarding\OffboardingListResource;
 use App\Filament\Resources\Onboarding\OnboardingListResource;
 use App\Filament\Resources\PatientResource;
@@ -264,6 +265,14 @@ class AdminPanelProvider extends PanelProvider
 
 
                     ]);
+
+                    // HRMS Resource
+                $navigationGroups[] =  NavigationGroup::make('HRMS')
+                ->items([
+                    // ...DailyWorkResource::getNavigationItems(),
+                    ...MyInfoResource::getNavigationItems(),
+
+                ]);
 
 
                 if (auth()->user()->hasPermissionTo('Settings Management')) {
